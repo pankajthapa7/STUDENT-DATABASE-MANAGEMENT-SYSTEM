@@ -1,0 +1,49 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DatabaseConnector {
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/studentmanagementsystem";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+
+    public static void main(String[] args) {
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            // Load MySQL JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish the connection to the database
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            // You can now create a Statement to interact with the database
+            statement = connection.createStatement();
+            System.out.println("Connected to the database successfully!");
+
+            // Example: Execute a simple query
+            String sql = "SELECT * FROM student";
+            statement.executeQuery(sql);
+
+        } catch (ClassNotFoundException e) {
+            System.err.println("MySQL JDBC Driver not found.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close the resources
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
